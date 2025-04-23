@@ -120,11 +120,20 @@ function initializeCharts() {
     });
 }
 
+// Update the setupWebSocket function
 function setupWebSocket() {
+    ws = new WebSocket('ws://localhost:8080');
+
     ws.onopen = function() {
         console.log('Connected to WebSocket server');
-        document.querySelector('.device-status').classList.add('connected');
-        document.querySelector('.device-status').classList.remove('disconnected');
+        document.querySelector('.device-status').className = 'device-status connected';
+        document.querySelector('.device-status strong:first-child').textContent = 'Status: Connected';
+    };
+
+    ws.onerror = function(error) {
+        console.error('WebSocket Error:', error);
+        document.querySelector('.device-status').className = 'device-status disconnected';
+        document.querySelector('.device-status strong:first-child').textContent = 'Status: Disconnected';
     };
 
     ws.onclose = function() {
@@ -237,4 +246,4 @@ function simulateData() {
 }
 
 // Uncomment for testing without WebSocket
-// setInterval(simulateData, 1000); 
+// setInterval(simulateData, 1000);
